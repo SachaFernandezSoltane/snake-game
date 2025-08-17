@@ -37,7 +37,7 @@ source venv/bin/activate  # Linux / macOS
 3. Install dependencies:
 
 ```bash
-pip install pygame
+pip -r requirements.txt
 ```
 
 4. Run the game:
@@ -85,6 +85,9 @@ snake-game/
 ├─ Graphics/
 │  ├─ apple.png 🍎
 ├─ main.py
+├─ requirements.txt
+├─ LICENCE
+├─ .gitignore
 ├─ README.md
 ```
 
