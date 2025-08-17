@@ -46,7 +46,7 @@ pip -r requirements.txt
 python main.py
 ```
 
-Make sure you have the `Graphics` folder with `apple.png` 🍎 and snake head images 🐍.
+Make sure you have the `Graphics` folder with `apple.png` 🍎.
 
 ---
 
