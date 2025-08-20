@@ -1,6 +1,6 @@
+import asyncio
 import pygame
 from pygame import Vector2
-
 from src.apple import Apple
 from src.snake import Snake
 
@@ -9,17 +9,18 @@ class Game:
         pygame.init()
         self.cell_size = 30
         self.number_of_cells = 25
-        self.screen = pygame.display.set_mode((self.cell_size*self.number_of_cells, self.cell_size*self.number_of_cells))
-        self.screen.fill((173,204,96))
+        self.screen = pygame.display.set_mode(
+            (self.cell_size * self.number_of_cells, self.cell_size * self.number_of_cells)
+        )
         pygame.display.set_caption("Snake")
         self.running = True
-        self.apple = Apple(self.cell_size,self.number_of_cells)
-        self.snake = Snake(self.cell_size,self.number_of_cells)
-        self.snake_update = pygame.USEREVENT
-        pygame.time.set_timer(self.snake_update, 250)
+        self.apple = Apple(self.cell_size, self.number_of_cells)
+        self.snake = Snake(self.cell_size, self.number_of_cells)
         self.game_status = 'RUNNING'
 
-    def run(self):
+    async def run(self):
+        asyncio.create_task(self.snake_loop())
+
         while self.running:
             if self.game_status == 'RUNNING':
                 self.draw()
@@ -30,7 +31,17 @@ class Game:
                 self.check_outside_collision()
             else:
                 self.start_game()
+
+            pygame.display.flip()
+            await asyncio.sleep(0)
+
         pygame.quit()
+
+    async def snake_loop(self):
+        while self.running:
+            if self.game_status == 'RUNNING':
+                self.snake.update()
+            await asyncio.sleep(0.25)  # 250 ms
 
     def start_game(self):
         for event in pygame.event.get():
@@ -41,8 +52,6 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            elif event.type == self.snake_update:
-                self.snake.update()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and self.snake.direction != Vector2(1, 0):
                     self.snake.direction = Vector2(-1, 0)
@@ -52,12 +61,6 @@ class Game:
                     self.snake.direction = Vector2(0, -1)
                 if event.key == pygame.K_DOWN and self.snake.direction != Vector2(0, -1):
                     self.snake.direction = Vector2(0, 1)
-                self.snake.update()
-            else:
-                pass
-
-    def update(self):
-        self.snake.update()
 
     def check_collision(self):
         if self.snake.body[0] == self.apple.pos:
@@ -69,9 +72,8 @@ class Game:
             self.game_over()
 
     def check_outside_collision(self):
-        if self.snake.body[0].x == self.number_of_cells or self.snake.body[0].x == -1:
-            self.game_over()
-        elif self.snake.body[0].y == self.number_of_cells or self.snake.body[0].y == -1:
+        head = self.snake.body[0]
+        if head.x < 0 or head.x >= self.number_of_cells or head.y < 0 or head.y >= self.number_of_cells:
             self.game_over()
 
     def draw(self):
@@ -92,14 +94,9 @@ class Game:
 
     def victory(self):
         self.draw()
-        font = pygame.font.SysFont(None, 60)
+        font = pygame.font.Font(None, 60)
         text = font.render("YOU WIN!", True, (255, 215, 0))
         text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2))
         self.screen.blit(text, text_rect)
         pygame.display.flip()
         self.game_status = 'VICTORY'
-
-
-if __name__ == "__main__":
-    game = Game()
-    game.run()
