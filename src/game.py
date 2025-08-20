@@ -18,7 +18,7 @@ class Game:
         self.snake = Snake(self.cell_size, self.number_of_cells)
         self.game_status = 'RUNNING'
 
-    async def run(self):
+    async def run_async(self):
         asyncio.create_task(self.snake_loop())
 
         while self.running:
