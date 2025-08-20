@@ -1,4 +1,29 @@
-/venv
-.venv
-./venv
-.idea
+# Environnements virtuels
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.idea/
+.vscode/
+
+# Builds
+build/
+.build/
+web/
+dist/
+*.egg-info/
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Pygbag / Pyodide spécifiques
+__pycache__/
+*.wasm

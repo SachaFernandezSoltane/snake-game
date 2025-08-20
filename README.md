@@ -4,6 +4,8 @@
 
 A simple Snake game built with Python and Pygame. Navigate the snake with Arrow keys ⬆️⬇️⬅️➡️, eat 🍎 apples, avoid walls and yourself, and try to fill the grid to win! 🏆
 
+demo : https://sachafernandezsoltane.github.io/snake-game/web/
+
 ---
 
 ## ✨ Features
